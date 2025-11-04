@@ -20,3 +20,16 @@ Currently and in the near future I won't be self-hosting any personal or sensiti
 A core concept I was focusing on while designing this was **volatility**, which basically means that I don't care if there is data loss at some point because I don't and won't be hosting personal, critical or sensitive content to begin with.
 
 ![Design](./_static/design.png)
+
+## Setup
+
+*W.I.P.*
+
+#
+
+<div style="text-align: center;">
+    <img src="./_static/linux-p.gif" alt="GIF 1" style="display: inline-block; margin: 10px;" />
+    <img src="./_static/debian-powered.gif" alt="GIF 2" style="display: inline-block; margin: 10px;" />
+    <img src="./_static/ubuntu-88x31.gif" alt="GIF 3" style="display: inline-block; margin: 10px;" />
+    <img src="./_static/blink-0.gif" alt="GIF 3" style="display: inline-block; margin: 10px;" />
+</div>
