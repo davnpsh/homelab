@@ -27,7 +27,7 @@ A core concept I was focusing on while designing this was **volatility**, which 
 
 #
 
-<div style="text-align: center;">
+<div>
     <img src="./_static/linux-p.gif" alt="GIF 1" style="display: inline-block; margin: 10px;" />
     <img src="./_static/debian-powered.gif" alt="GIF 2" style="display: inline-block; margin: 10px;" />
     <img src="./_static/ubuntu-88x31.gif" alt="GIF 3" style="display: inline-block; margin: 10px;" />
