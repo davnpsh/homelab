@@ -1,0 +1,13 @@
+- hosts: main
+
+  vars_files:
+    - secrets.yml
+
+  roles:
+    - role: security
+      become: yes
+
+    - role: docker
+      become: yes
+
+    - role: services
