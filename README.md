@@ -2,7 +2,7 @@
 
 This is collection of configuration files and ansible playbooks that will serve both as setup and documentation of my Homelab infrastructure.
 
-This is a work in progress and I'd like to continue adding a lot of features and/or services in the future.
+This is a *work in progress* and I'd like to continue adding a lot of features and/or services in the future.
 
 ## Hardware
 
@@ -23,7 +23,47 @@ A core concept I was focusing on while designing this was **volatility**, which 
 
 ## Setup
 
-*W.I.P.*
+The ansible playbooks assume the machine they are being run on can connect via ssh just with their hostname. For instance, `ssh odin` should work. The user to login as **SHOULD NOT** be root.
+
+1. Clone this repo and navigate to the root directory.
+
+**NOTE:** Make sure to fill the env vars wherever they are need. Inside some dirs they is a `.env.example` file. Copy it to an `.env` file in the same dir and fill it.
+
+2. With Python installed, create a virtual environment with:
+
+```bash
+python -m venv .venv
+```
+
+3. Activate the virtual environment. Example:
+
+```bash
+source .venv/bin/activate.fish
+```
+
+4. Install ansible:
+
+```bash
+pip install ansible
+```
+
+Check if everything is okay with:
+
+```bash
+which ansible
+```
+
+5. (OPTIONAL) Navigate to `[machine]/ansible` and do this to check syntax:
+
+```bash
+ansible-playbook --syntax-check setup.yml
+```
+
+6. To run a playbook just do:
+
+```bash
+ansible-playbook --ask-become-pass setup.yml
+```
 
 #
 
