@@ -27,7 +27,7 @@ The ansible playbooks assume the machine they are being run on can connect via s
 
 1. Clone this repo and navigate to the root directory.
 
-**NOTE:** Make sure to fill the env vars wherever they are need. Inside some dirs they is a `.env.example` file. Copy it to an `.env` file in the same dir and fill it.
+**NOTE:** Make sure to fill the env vars wherever they are need. Inside some dirs they is a `.env.example` file. Copy it to an `.env` file in the same dir and fill it. Same with `secrets.example.yml`.
 
 2. With Python installed, create a virtual environment with:
 
