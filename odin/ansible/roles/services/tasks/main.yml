@@ -1,0 +1,22 @@
+- name: Create services directory
+  ansible.builtin.file:
+    path: "{{ ansible_facts.user_dir }}/services"
+    state: directory
+    mode: "0755"
+
+- name: Copy .env file
+  ansible.builtin.copy:
+    src: .env
+    dest: "{{ ansible_facts.user_dir }}/services/.env"
+    mode: "0644"
+
+- name: Copy docker-compose.yml file
+  ansible.builtin.copy:
+    src: docker-compose.yml
+    dest: "{{ ansible_facts.user_dir }}/services/docker-compose.yml"
+    mode: "0644"
+
+- name: Start services with Docker Compose
+  community.docker.docker_compose_v2:
+    project_src: "{{ ansible_facts.user_dir }}/services"
+    state: present
