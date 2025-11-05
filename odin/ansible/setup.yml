@@ -7,6 +7,9 @@
     - role: security
       become: yes
 
+    - role: tweaks
+      become: yes
+
     - role: docker
       become: yes
 
