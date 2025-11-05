@@ -23,7 +23,7 @@ A core concept I was focusing on while designing this was **volatility**, which 
 
 ## Setup
 
-The ansible playbooks assume the machine they are being run on can connect via ssh just with their hostname. For instance, `ssh odin` should work. The user to login as **SHOULD NOT** be root.
+The ansible playbooks assume the machine they are being run on can connect via ssh just with their hostname. For instance, `ssh odin` should work. The user to login as **SHOULD NOT** be root. Also, authentication must be done with a ssh key, otherwise you will be locked out.
 
 1. Clone this repo and navigate to the root directory.
 
