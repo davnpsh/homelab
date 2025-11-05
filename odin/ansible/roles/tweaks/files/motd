@@ -5,7 +5,7 @@ RED="\e[38;2;255;0;0m"
 CYAN="\e[36m"
 RESET="\e[0m"
 
-# --- Logo ---
+# --- Logo (for future font reference: Rebel) ---
 echo
 printf "${RED}    ███████        █████  ███            \e[0m\n"
 printf "${RED}  ███▒▒▒▒▒███     ▒▒███  ▒▒▒             \e[0m\n"
