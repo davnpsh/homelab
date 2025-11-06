@@ -45,3 +45,23 @@ services:
     depends_on:
       tailscale:
         condition: service_healthy
+
+  dns:
+    image: adguard/adguardhome
+    restart: unless-stopped
+    volumes:
+      - ./dns/work:/opt/adguardhome/work
+      - ./dns/conf:/opt/adguardhome/conf
+    # DNS server will not work until the initial setup is finished
+    healthcheck:
+      test: ["CMD-SHELL", "nc -z 127.0.0.1 53 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    depends_on:
+      # The UI is exposed through the proxy service, but since the
+      # proxy service also depends on this service hostname to be
+      # resolvable, I cannot add a circular dependency.
+      tailscale:
+        condition: service_healthy
