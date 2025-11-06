@@ -1,0 +1,11 @@
+- name: Create dashboard config directory
+  ansible.builtin.file:
+    path: "{{ ansible_facts.user_dir }}/services/dashboard/config"
+    state: directory
+    mode: "0755"
+
+- name: Copy glance.yml to dashboard config
+  ansible.builtin.copy:
+    src: glance.yml
+    dest: "{{ ansible_facts.user_dir }}/services/dashboard/config/glance.yml"
+    mode: "0644"

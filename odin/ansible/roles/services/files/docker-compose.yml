@@ -65,3 +65,12 @@ services:
       # resolvable, I cannot add a circular dependency.
       tailscale:
         condition: service_healthy
+
+  dashboard:
+    image: glanceapp/glance
+    restart: unless-stopped
+    volumes:
+      - ./dashboard/config:/app/config
+    depends_on:
+      proxy:
+        condition: service_healthy
