@@ -1,0 +1,26 @@
+services:
+  tailscale:
+    image: tailscale/tailscale:latest
+    hostname: odin
+    restart: unless-stopped
+    environment:
+      - TS_AUTHKEY=${TS_AUTHKEY}
+      - TS_EXTRA_ARGS=--advertise-tags=tag:container
+      - TS_STATE_DIR=/var/lib/tailscale
+      - TS_USERSPACE=false
+    volumes:
+      - ${PWD}/tailscale/state:/var/lib/tailscale
+    devices:
+      - /dev/net/tun:/dev/net/tun
+
+  proxy:
+    image: "jc21/nginx-proxy-manager:latest"
+    restart: unless-stopped
+    depends_on:
+      - tailscale
+    environment:
+      TZ: ${PROXY_TZ}
+    volumes:
+      - ${PWD}/proxy/data:/data
+      - ${PWD}/proxy/letsencrypt:/etc/letsencrypt
+    network_mode: service:tailscale
