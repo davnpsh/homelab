@@ -1,7 +1,5 @@
 - name: Disable update-motd.d original scripts
   ansible.builtin.shell: chmod -x /etc/update-motd.d/*
-  args:
-    warn: false
 
 - name: Copy custom MOTD
   copy:
