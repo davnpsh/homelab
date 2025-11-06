@@ -59,10 +59,16 @@ which ansible
 ansible-playbook --syntax-check setup.yml
 ```
 
-6. To run a playbook just do:
+6. Run the initial setup part as root (this is important, because at some point, is it necessary to log out and log back in)
 
 ```bash
-ansible-playbook --ask-become-pass setup.yml
+ansible-playbook --ask-become-pass setup.yml --tags root
+```
+
+7. Run the rest with:
+
+```bash
+ansible-playbook --ask-become-pass setup.yml --skip-tags root
 ```
 
 #
