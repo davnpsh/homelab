@@ -6,11 +6,22 @@
   roles:
     - role: security
       become: yes
+      tags:
+        - root
+        - security
 
     - role: tweaks
       become: yes
+      tags:
+        - root
+        - tweaks
 
     - role: docker
       become: yes
+      tags:
+        - root
+        - docker
 
     - role: services
+      tags:
+        - services

@@ -5,22 +5,43 @@ services:
     restart: unless-stopped
     environment:
       - TS_AUTHKEY=${TS_AUTHKEY}
-      - TS_EXTRA_ARGS=--advertise-tags=tag:container
+      # ---
+      # According to documentation in https://tailscale.com/kb/1282/docker
+      # --advertise-tags is an argument you can pass in to the Tailscale CLI in
+      # a `tailscale up` command using TS_EXTRA_ARGS, but using this variable
+      # with this argument will make the container exit with error, because, in reality,
+      # you advertise tags in a `tailscale login` command, as seen in
+      # https://tailscale.com/kb/1080/cli#login
+      # ---
+      #- TS_EXTRA_ARGS=--advertise-tags=tag:container
       - TS_STATE_DIR=/var/lib/tailscale
       - TS_USERSPACE=false
     volumes:
-      - ${PWD}/tailscale/state:/var/lib/tailscale
+      - ./tailscale/state:/var/lib/tailscale
     devices:
       - /dev/net/tun:/dev/net/tun
+    cap_add:
+      - net_admin
+    healthcheck:
+      test: ["CMD-SHELL", "tailscale status --self"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
 
   proxy:
     image: "jc21/nginx-proxy-manager:latest"
     restart: unless-stopped
-    depends_on:
-      - tailscale
     environment:
       TZ: ${PROXY_TZ}
     volumes:
-      - ${PWD}/proxy/data:/data
-      - ${PWD}/proxy/letsencrypt:/etc/letsencrypt
+      - ./proxy/data:/data
+      - ./proxy/letsencrypt:/etc/letsencrypt
     network_mode: service:tailscale
+    healthcheck:
+      test: ["CMD", "/usr/bin/check-health"]
+      interval: 10s
+      timeout: 3s
+    depends_on:
+      tailscale:
+        condition: service_healthy
