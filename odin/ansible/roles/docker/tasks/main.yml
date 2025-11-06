@@ -31,7 +31,8 @@
     mode: "0644"
     force: true
 
-# This only works for amd4 arch or find a way to replace with a variable
+# This will only work for amd64 arch
+# For other archs, specify it in [arch=..., or find a way to replace with a variable
 - name: Add Docker APT repository
   ansible.builtin.apt_repository:
     repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu {{ ansible_lsb.codename }} stable"
