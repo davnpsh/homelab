@@ -1,5 +1,6 @@
 services:
   tailscale:
+    # Ports used: 53, 80, 81, 443
     image: tailscale/tailscale:latest
     hostname: odin
     restart: unless-stopped
@@ -35,6 +36,7 @@ services:
       start_period: 10s
 
   proxy:
+    # Ports used: see Tailscale
     image: "jc21/nginx-proxy-manager:latest"
     restart: unless-stopped
     labels:
@@ -58,6 +60,7 @@ services:
         condition: service_healthy
 
   dns:
+    # Ports used: 53, 3000
     image: adguard/adguardhome
     restart: unless-stopped
     labels:
@@ -84,6 +87,7 @@ services:
         condition: service_healthy
 
   dashboard:
+    # Ports used: 8080
     image: glanceapp/glance
     restart: unless-stopped
     labels:
@@ -100,6 +104,25 @@ services:
       # TODO: Use local docker-socket-proxy. I don't feel comfortable with this
       - /var/run/docker.sock:/var/run/docker.sock
       - ./dashboard/config:/app/config
+    depends_on:
+      proxy:
+        condition: service_healthy
+
+  bookmarks:
+    # Ports used: 8080
+    image: ghcr.io/go-shiori/shiori
+    restart: unless-stopped
+    labels:
+      glance.name: Bookmarks
+      glance.icon: mdi:bookmark-box
+      glance.url: ${BOOKMARKS_PANEL_URL}
+      glance.description: Save links
+      glance.hide: false
+    environment:
+      SHIORI_DIR: /srv/shiori
+      SHIORI_HTTP_SECRET_KEY: ${BOOKMARKS_HTTP_SECRET_KEY}
+    volumes:
+      - "./bookmarks/shiori:/srv/shiori"
     depends_on:
       proxy:
         condition: service_healthy
