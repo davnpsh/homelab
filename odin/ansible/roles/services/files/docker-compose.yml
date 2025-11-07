@@ -69,6 +69,10 @@ services:
   dashboard:
     image: glanceapp/glance
     restart: unless-stopped
+    environment:
+      DNS_PANEL_URL: ${DNS_PANEL_URL}
+      DNS_PANEL_USERNAME: ${DNS_PANEL_USERNAME}
+      DNS_PANEL_PASSWORD: ${DNS_PANEL_PASSWORD}
     volumes:
       - ./dashboard/config:/app/config
     depends_on:
