@@ -122,7 +122,19 @@ services:
       SHIORI_DIR: /srv/shiori
       SHIORI_HTTP_SECRET_KEY: ${BOOKMARKS_HTTP_SECRET_KEY}
     volumes:
-      - "./bookmarks/shiori:/srv/shiori"
+      - ./bookmarks/shiori:/srv/shiori
     depends_on:
       proxy:
         condition: service_healthy
+
+  watchtower:
+    image: containrrr/watchtower
+    restart: unless-stopped
+    labels:
+      glance.name: Watchtower
+      glance.icon: sh:watchtower-light
+      glance.description: Automatic updates
+      glance.hide: false
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: --cleanup
