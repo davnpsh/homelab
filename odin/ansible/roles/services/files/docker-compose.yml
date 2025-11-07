@@ -3,6 +3,11 @@ services:
     image: tailscale/tailscale:latest
     hostname: odin
     restart: unless-stopped
+    labels:
+      glance.name: Tailscale
+      glance.icon: sh:tailscale-light
+      glance.description: VPN
+      glance.hide: false
     environment:
       - TS_AUTHKEY=${TS_AUTHKEY}
       # ---
@@ -32,6 +37,12 @@ services:
   proxy:
     image: "jc21/nginx-proxy-manager:latest"
     restart: unless-stopped
+    labels:
+      glance.name: Proxy
+      glance.icon: sh:nginx-proxy-manager-light
+      glance.url: ${PROXY_PANEL_URL}
+      glance.description: Proxy & port forwarding
+      glance.hide: false
     environment:
       TZ: ${PROXY_TZ}
     volumes:
@@ -49,6 +60,12 @@ services:
   dns:
     image: adguard/adguardhome
     restart: unless-stopped
+    labels:
+      glance.name: DNS
+      glance.icon: sh:adguard-home-light
+      glance.url: ${DNS_PANEL_URL}
+      glance.description: Plain DNS
+      glance.hide: false
     volumes:
       - ./dns/work:/opt/adguardhome/work
       - ./dns/conf:/opt/adguardhome/conf
@@ -69,11 +86,19 @@ services:
   dashboard:
     image: glanceapp/glance
     restart: unless-stopped
+    labels:
+      glance.name: Dashboard
+      glance.icon: sh:glance-light
+      glance.url: ${DASHBOARD_PANEL_URL}
+      glance.description: Home & status
+      glance.hide: false
     environment:
-      DNS_PANEL_URL: ${DNS_PANEL_URL}
+      DNS_PANEL_URL: ${DNS_PANEL_INTERNAL_URL}
       DNS_PANEL_USERNAME: ${DNS_PANEL_USERNAME}
       DNS_PANEL_PASSWORD: ${DNS_PANEL_PASSWORD}
     volumes:
+      # TODO: Use local docker-socket-proxy. I don't feel comfortable with this
+      - /var/run/docker.sock:/var/run/docker.sock
       - ./dashboard/config:/app/config
     depends_on:
       proxy:

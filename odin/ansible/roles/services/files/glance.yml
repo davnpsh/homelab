@@ -38,7 +38,16 @@ pages:
         widgets:
           - type: group
             widgets:
-              - type: hacker-news
+              - type: docker-containers
+                title: Odin
+                hide-by-default: true
+              - type: docker-containers
+                title: Freya
+                hide-by-default: true
+                # TODO: Find a way to communicate to Freya
+                sock-path: /dev/null
+
+          - type: hacker-news
 
           - type: videos
             style: grid-cards
