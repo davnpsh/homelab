@@ -4,6 +4,9 @@
     state: directory
     mode: "0755"
 
+# TODO: make step-by-step copy tasks for the files
+# maintain certs synchronized
+# this is just a temp solution
 - name: Copy everything into web directory
   ansible.builtin.copy:
     src: "./"
