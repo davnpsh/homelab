@@ -13,7 +13,7 @@ update_repo() {
     local url="$1"
     local dir="$2"
     
-    if [[ -d "$dir" ]]; then
+    if [[ -d "$dir/.git" ]]; then
         echo "updating $dir..."
         git -C "$dir" pull
     else
@@ -27,8 +27,8 @@ prepare_builder() {
     local dir="$1"
     local image_name="$dir-builder"
     
-    if [[ ! -d "$dir" ]]; then
-        echo "there is no for $dir dir"
+    if [[ ! -f "$dir/Dockerfile" ]]; then
+        echo "no Dockerfile found in '$dir'."
         echo "first, run: $0 fetch $dir"
         exit 1
     fi
@@ -52,7 +52,7 @@ build() {
     
     echo "building $dir..."
     
-    docker run --rm -v "$(pwd)/$dir:/app" "$image_name"
+    docker run --rm -v "$(pwd)/$dir/dist:/app/dist" "$image_name"
 }
 
 show_help() {
@@ -62,15 +62,10 @@ usage: $0 <command> [subcommand]
 commands:
 
     help                    -   show this message
-        
     up                      -   bring the pages up
-        
     down                    -   bring them down
-    
     fetch <website|blog>    -   pull the code
-    
     prepare <website|blog>  -   prepare the builders of the static files
-        
     update <website|blog>   -   build the static files
 EOF
 }

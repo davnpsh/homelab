@@ -1,0 +1,16 @@
+- name: Create ~/web directory
+  ansible.builtin.file:
+    path: "~/web"
+    state: directory
+    mode: "0755"
+
+- name: Copy everything into web directory
+  ansible.builtin.copy:
+    src: "./"
+    dest: "~/web"
+    mode: "0644"
+
+- name: Make web.sh executable
+  ansible.builtin.file:
+    path: "~/web/web.sh"
+    mode: "0755"

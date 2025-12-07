@@ -26,3 +26,7 @@
       tags:
         - root
         - docker
+        
+    - role: web
+      tags:
+        - web
