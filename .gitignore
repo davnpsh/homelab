@@ -2,3 +2,8 @@
 **/.env
 **/**.env
 **/secrets.yml
+
+# keys
+**/*.crt
+**/*.key
+**/*.pem
