@@ -1,0 +1,39 @@
+#!/bin/bash
+
+# --- Colors ---
+GREEN="\e[38;2;0;255;0m"
+CYAN="\e[36m"
+RESET="\e[0m"
+
+# --- Logo (for future font reference: Rebel) ---
+echo
+printf "${GREEN} ██████   ██████                                ███ \e[0m\n"
+printf "${GREEN}▒▒██████ ██████                                ▒▒▒  \e[0m\n"
+printf "${GREEN} ▒███▒█████▒███   ██████    ███████ ████████   ████ \e[0m\n"
+printf "${GREEN} ▒███▒▒███ ▒███  ▒▒▒▒▒███  ███▒▒███▒▒███▒▒███ ▒▒███ \e[0m\n"
+printf "${GREEN} ▒███ ▒▒▒  ▒███   ███████ ▒███ ▒███ ▒███ ▒███  ▒███ \e[0m\n"
+printf "${GREEN} ▒███      ▒███  ███▒▒███ ▒███ ▒███ ▒███ ▒███  ▒███ \e[0m\n"
+printf "${GREEN} █████     █████▒▒████████▒▒███████ ████ █████ █████\e[0m\n"
+printf "${GREEN}▒▒▒▒▒     ▒▒▒▒▒  ▒▒▒▒▒▒▒▒  ▒▒▒▒▒███▒▒▒▒ ▒▒▒▒▒ ▒▒▒▒▒ \e[0m\n"
+printf "${GREEN}                           ███ ▒███                 \e[0m\n"
+printf "${GREEN}                          ▒▒██████                  \e[0m\n"
+printf "${GREEN}                           ▒▒▒▒▒▒                   \e[0m\n"
+echo
+
+# --- Status ---
+host=$(hostname)
+os=$(grep '^PRETTY_NAME' /etc/os-release | cut -d= -f2 | tr -d '"')
+kernel=$(uname -r)
+uptime=$(uptime -p | sed 's/up //')
+load_avg=$(cut -d ' ' -f1 /proc/loadavg)
+cores=$(nproc)
+load_pct=$(awk -v l="$load_avg" -v c="$cores" 'BEGIN { printf "%.2f", (l/c)*100 }')
+mem_used=$(free -h | awk '/Mem:/ {print $3}')
+mem_total=$(free -h | awk '/Mem:/ {print $2}')
+disk_used=$(df -h / | awk 'NR==2 {print $3}')
+disk_total=$(df -h / | awk 'NR==2 {print $2}')
+
+printf "${GREEN}%s${RESET} | ${CYAN}%s${RESET} | kernel ${CYAN}%s${RESET} | up ${CYAN}%s${RESET} | load ${CYAN}%s%%%s${RESET} | mem ${CYAN}%s/%s${RESET} | disk ${CYAN}%s/%s${RESET}\n" \
+"$host" "$os" "$kernel" "$uptime" "$load_pct" "" "$mem_used" "$mem_total" "$disk_used" "$disk_total"
+
+echo

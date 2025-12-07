@@ -1,0 +1,3 @@
+- name: Set the hostname to magni
+  ansible.builtin.hostname:
+    name: magni

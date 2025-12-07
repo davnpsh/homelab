@@ -1,0 +1,10 @@
+- name: Disable update-motd.d original scripts
+  ansible.builtin.shell: chmod -x /etc/update-motd.d/*
+
+- name: Copy custom MOTD
+  copy:
+    src: 01-motd
+    dest: /etc/update-motd.d/
+    owner: root
+    group: root
+    mode: "0755"

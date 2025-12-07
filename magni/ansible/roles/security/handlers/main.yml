@@ -1,0 +1,7 @@
+# New changes: https://discourse.ubuntu.com/t/sshd-now-uses-socket-based-activation-ubuntu-22-10-and-later/30189/19
+
+- name: Restart ssh socket (formerly sshd)
+  ansible.builtin.systemd:
+    name: ssh.socket #sshd
+    daemon_reload: true
+    state: restarted
