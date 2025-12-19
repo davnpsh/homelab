@@ -100,6 +100,7 @@ services:
       DNS_PANEL_URL: ${DNS_PANEL_INTERNAL_URL}
       DNS_PANEL_USERNAME: ${DNS_PANEL_USERNAME}
       DNS_PANEL_PASSWORD: ${DNS_PANEL_PASSWORD}
+      TS_APIKEY: ${TS_APIKEY}
     volumes:
       # TODO: Use local docker-socket-proxy. I don't feel comfortable with this
       - /var/run/docker.sock:/var/run/docker.sock
