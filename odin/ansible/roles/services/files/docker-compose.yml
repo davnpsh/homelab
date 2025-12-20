@@ -59,6 +59,16 @@ services:
       tailscale:
         condition: service_healthy
 
+  socket-proxy:
+    # This image is used to expose the docker socket as read-only
+    image: "11notes/socket-proxy:2.1.6"
+    restart: "always"
+    read_only: true
+    user: "0:988"
+    volumes:
+      - "/run/docker.sock:/run/docker.sock:ro"
+      - "socket-proxy.run:/run/proxy"
+
   dns:
     # Ports used: 53, 3000
     image: adguard/adguardhome
@@ -90,6 +100,7 @@ services:
     # Ports used: 8080
     image: glanceapp/glance
     restart: unless-stopped
+    # read_only: true
     labels:
       glance.name: Dashboard
       glance.icon: sh:glance-light
@@ -103,8 +114,8 @@ services:
       TS_APIKEY: ${TS_APIKEY}
       WUD_ODIN_URL: ${WUD_ODIN_URL}
     volumes:
-      # TODO: Use local docker-socket-proxy. I don't feel comfortable with this
-      - /var/run/docker.sock:/var/run/docker.sock
+      #- /var/run/docker.sock:/var/run/docker.sock
+      - "socket-proxy.run:/var/run"
       - ./dashboard/config:/app/config
     depends_on:
       proxy:
@@ -132,6 +143,7 @@ services:
   updates:
     # Ports used: 3000
     image: getwud/wud
+    read_only: true
     environment:
       #WUD_AUTH_BASIC_MY_USER: ${WUD_AUTH_BASIC_MY_USER}
       #WUD_AUTH_BASIC_MY_HASH: ${WUD_AUTH_BASIC_MY_HASH}
@@ -141,4 +153,8 @@ services:
       # I feel more comfortable updating manually :)
       # WUD_TRIGGER_DOCKER_LOCAL_PRUNE: true
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+      #- /var/run/docker.sock:/var/run/docker.sock
+      - "socket-proxy.run:/var/run"
+
+volumes:
+  socket-proxy.run:
