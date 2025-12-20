@@ -127,3 +127,15 @@ services:
     depends_on:
       proxy:
         condition: service_healthy
+
+  updates:
+    # Ports used: 3000
+    image: getwud/wud
+    environment:
+      WUD_AUTH_BASIC_MY_USER: ${WUD_AUTH_BASIC_MY_USER}
+      WUD_AUTH_BASIC_MY_HASH: ${WUD_AUTH_BASIC_MY_HASH}
+      WUD_TRIGGER_NTFY_PUBLIC_URL: ${WUD_TRIGGER_NTFY_PUBLIC_URL}
+      WUD_TRIGGER_NTFY_PUBLIC_TOPIC: ${WUD_TRIGGER_NTFY_PUBLIC_TOPIC}
+      WUD_TRIGGER_NTFY_PUBLIC_SIMPLETITLE: New $${container.updateKind.kind} found for container $${container.name}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
