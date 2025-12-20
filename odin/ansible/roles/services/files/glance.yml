@@ -109,3 +109,9 @@ pages:
             password: ${DNS_PANEL_PASSWORD}
 
           - $include: custom_widgets/tailscale.yml
+          
+          - type: group
+            title: Updates
+            widgets:
+              - $include: custom_widgets/wud-odin.yml
+
