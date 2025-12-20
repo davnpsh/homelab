@@ -1,7 +1,7 @@
 - type: custom-api
-  title: Odin updates
+  title: Updates
   cache: 1h
-  url: http://${WUD_ODIN_URL}/api/containers/
+  url: http://${WUD_URL}/api/containers/
   method: GET
   template: |
     {{/* You are using WUD Monitor v2.0*/}}

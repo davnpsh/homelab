@@ -112,7 +112,7 @@ services:
       DNS_PANEL_USERNAME: ${DNS_PANEL_USERNAME}
       DNS_PANEL_PASSWORD: ${DNS_PANEL_PASSWORD}
       TS_APIKEY: ${TS_APIKEY}
-      WUD_ODIN_URL: ${WUD_ODIN_URL}
+      WUD_URL: ${WUD_URL}
     volumes:
       #- /var/run/docker.sock:/var/run/docker.sock
       - "socket-proxy.run:/var/run"
