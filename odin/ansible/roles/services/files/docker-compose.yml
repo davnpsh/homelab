@@ -147,6 +147,21 @@ services:
       proxy:
         condition: service_healthy
 
+  pdf:
+    # Ports used: 8080
+    container_name: odin-pdf
+    image: bentopdf/bentopdf-simple:latest
+    restart: unless-stopped
+    labels:
+      glance.name: PDF tools
+      glance.icon: sh:bentopdf-light
+      glance.url: ${PDF_PANEL_URL}
+      glance.description: Edit PDFs
+      glance.hide: false
+    depends_on:
+      proxy:
+        condition: service_healthy
+
   updates:
     # Ports used: 3000
     container_name: odin-updates
@@ -166,12 +181,12 @@ services:
       WUD_TRIGGER_NTFY_PUBLIC_SIMPLETITLE: New $${container.updateKind.kind} found for container $${container.name}
       # I feel more comfortable updating manually :)
       # WUD_TRIGGER_DOCKER_LOCAL_PRUNE: true
-      
+
       # Odin watcher
       WUD_WATCHER_ODIN_HOST: socket-proxy
     #volumes:
-      #- /var/run/docker.sock:/var/run/docker.sock  # insecure
-      # - "socket-proxy.run:/var/run"               # secure (local)
+    #- /var/run/docker.sock:/var/run/docker.sock  # insecure
+    # - "socket-proxy.run:/var/run"               # secure (local)
 
 volumes:
   socket-proxy.run:
