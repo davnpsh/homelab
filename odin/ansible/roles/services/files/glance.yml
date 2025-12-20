@@ -110,5 +110,5 @@ pages:
 
           - $include: custom_widgets/tailscale.yml
           
-          - $include: custom_widgets/wud-odin.yml
+          - $include: custom_widgets/wud.yml
 
