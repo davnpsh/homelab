@@ -1,6 +1,7 @@
 services:
-  tailscale:
+  vpn:
     # Ports used: 53, 80, 81, 443
+    container_name: odin-vpn
     image: tailscale/tailscale:latest
     hostname: odin
     restart: unless-stopped
@@ -36,7 +37,8 @@ services:
       start_period: 10s
 
   proxy:
-    # Ports used: see Tailscale
+    # Ports used: see `vpn` service
+    container_name: odin-proxy
     image: "jc21/nginx-proxy-manager:latest"
     restart: unless-stopped
     labels:
@@ -50,17 +52,18 @@ services:
     volumes:
       - ./proxy/data:/data
       - ./proxy/letsencrypt:/etc/letsencrypt
-    network_mode: service:tailscale
+    network_mode: service:vpn
     healthcheck:
       test: ["CMD", "/usr/bin/check-health"]
       interval: 10s
       timeout: 3s
     depends_on:
-      tailscale:
+      vpn:
         condition: service_healthy
 
   socket-proxy:
     # This image is used to expose the docker socket as read-only
+    container_name: odin-socket-proxy
     image: "11notes/socket-proxy:2.1.6"
     restart: "always"
     read_only: true
@@ -71,6 +74,7 @@ services:
 
   dns:
     # Ports used: 53, 3000
+    container_name: odin-dns
     image: adguard/adguardhome
     restart: unless-stopped
     labels:
@@ -93,11 +97,12 @@ services:
       # The UI is exposed through the proxy service, but since the
       # proxy service also depends on this service hostname to be
       # resolvable, I cannot add a circular dependency.
-      tailscale:
+      vpn:
         condition: service_healthy
 
   dashboard:
     # Ports used: 8080
+    container_name: odin-dashboard
     image: glanceapp/glance
     restart: unless-stopped
     # read_only: true
@@ -123,6 +128,7 @@ services:
 
   bookmarks:
     # Ports used: 8080
+    container_name: odin-bookmarks
     image: ghcr.io/go-shiori/shiori
     restart: unless-stopped
     labels:
@@ -142,8 +148,15 @@ services:
 
   updates:
     # Ports used: 3000
+    container_name: odin-updates
     image: getwud/wud
     read_only: true
+    labels:
+      glance.name: Updates
+      glance.icon: sh:docker-light
+      glance.url: ${WUD_PANEL_URL}
+      glance.description: See updates
+      glance.hide: false
     environment:
       #WUD_AUTH_BASIC_MY_USER: ${WUD_AUTH_BASIC_MY_USER}
       #WUD_AUTH_BASIC_MY_HASH: ${WUD_AUTH_BASIC_MY_HASH}
