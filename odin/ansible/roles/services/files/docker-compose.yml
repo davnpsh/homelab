@@ -137,5 +137,7 @@ services:
       WUD_TRIGGER_NTFY_PUBLIC_URL: ${WUD_TRIGGER_NTFY_PUBLIC_URL}
       WUD_TRIGGER_NTFY_PUBLIC_TOPIC: ${WUD_TRIGGER_NTFY_PUBLIC_TOPIC}
       WUD_TRIGGER_NTFY_PUBLIC_SIMPLETITLE: New $${container.updateKind.kind} found for container $${container.name}
+      # I feel more comfortable updating manually :)
+      # WUD_TRIGGER_DOCKER_LOCAL_PRUNE: true
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock

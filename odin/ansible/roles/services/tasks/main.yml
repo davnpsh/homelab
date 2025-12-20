@@ -9,6 +9,12 @@
     src: .env
     dest: "{{ ansible_facts.user_dir }}/services/.env"
     mode: "0644"
+    
+- name: Copy update.sh file
+  ansible.builtin.copy:
+    src: update.sh
+    dest: "{{ ansible_facts.user_dir }}/services/update.sh"
+    mode: "0744"
 
 - name: Copy docker-compose.yml file
   ansible.builtin.copy:
