@@ -63,6 +63,7 @@ services:
 
   socket-proxy:
     # This image is used to expose the docker socket as read-only
+    # Ports used: 2375
     container_name: odin-socket-proxy
     image: "11notes/socket-proxy:2.1.6"
     restart: "always"
@@ -120,7 +121,7 @@ services:
       WUD_URL: ${WUD_URL}
     volumes:
       #- /var/run/docker.sock:/var/run/docker.sock
-      - "socket-proxy.run:/var/run"
+      #- "socket-proxy.run:/var/run"
       - ./dashboard/config:/app/config
     depends_on:
       proxy:
