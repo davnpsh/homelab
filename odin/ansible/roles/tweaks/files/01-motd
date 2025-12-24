@@ -1,20 +1,20 @@
 #!/bin/bash
 
 # --- Colors ---
-RED="\e[38;2;255;0;0m"
+MAIN_COLOR="\e[38;2;255;0;0m"
 CYAN="\e[36m"
 RESET="\e[0m"
 
 # --- Logo (for future font reference: Rebel) ---
 echo
-printf "${RED}    ███████        █████  ███            \e[0m\n"
-printf "${RED}  ███▒▒▒▒▒███     ▒▒███  ▒▒▒             \e[0m\n"
-printf "${RED} ███     ▒▒███  ███████  ████  ████████  \e[0m\n"
-printf "${RED}▒███      ▒███ ███▒▒███ ▒▒███ ▒▒███▒▒███ \e[0m\n"
-printf "${RED}▒███      ▒███▒███ ▒███  ▒███  ▒███ ▒███ \e[0m\n"
-printf "${RED}▒▒███     ███ ▒███ ▒███  ▒███  ▒███ ▒███ \e[0m\n"
-printf "${RED} ▒▒▒███████▒  ▒▒████████ █████ ████ █████\e[0m\n"
-printf "${RED}   ▒▒▒▒▒▒▒     ▒▒▒▒▒▒▒▒ ▒▒▒▒▒ ▒▒▒▒ ▒▒▒▒▒ \e[0m\n"
+printf "${MAIN_COLOR}    ███████        █████  ███            \e[0m\n"
+printf "${MAIN_COLOR}  ███▒▒▒▒▒███     ▒▒███  ▒▒▒             \e[0m\n"
+printf "${MAIN_COLOR} ███     ▒▒███  ███████  ████  ████████  \e[0m\n"
+printf "${MAIN_COLOR}▒███      ▒███ ███▒▒███ ▒▒███ ▒▒███▒▒███ \e[0m\n"
+printf "${MAIN_COLOR}▒███      ▒███▒███ ▒███  ▒███  ▒███ ▒███ \e[0m\n"
+printf "${MAIN_COLOR}▒▒███     ███ ▒███ ▒███  ▒███  ▒███ ▒███ \e[0m\n"
+printf "${MAIN_COLOR} ▒▒▒███████▒  ▒▒████████ █████ ████ █████\e[0m\n"
+printf "${MAIN_COLOR}   ▒▒▒▒▒▒▒     ▒▒▒▒▒▒▒▒ ▒▒▒▒▒ ▒▒▒▒ ▒▒▒▒▒ \e[0m\n"
 echo
 
 # --- Status ---
@@ -30,7 +30,7 @@ mem_total=$(free -h | awk '/Mem:/ {print $2}')
 disk_used=$(df -h / | awk 'NR==2 {print $3}')
 disk_total=$(df -h / | awk 'NR==2 {print $2}')
 
-printf "${RED}%s${RESET} | ${CYAN}%s${RESET} | kernel ${CYAN}%s${RESET} | up ${CYAN}%s${RESET} | load ${CYAN}%s%%%s${RESET} | mem ${CYAN}%s/%s${RESET} | disk ${CYAN}%s/%s${RESET}\n" \
+printf "${MAIN_COLOR}%s${RESET} | ${CYAN}%s${RESET} | kernel ${CYAN}%s${RESET} | up ${CYAN}%s${RESET} | load ${CYAN}%s%%%s${RESET} | mem ${CYAN}%s/%s${RESET} | disk ${CYAN}%s/%s${RESET}\n" \
 "$host" "$os" "$kernel" "$uptime" "$load_pct" "" "$mem_used" "$mem_total" "$disk_used" "$disk_total"
 
 echo
