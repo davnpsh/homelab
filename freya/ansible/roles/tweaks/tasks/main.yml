@@ -1,0 +1,4 @@
+---
+- include_tasks: hostname.yml
+- include_tasks: motd.yml
+- include_tasks: sysinfo-fetcher.yml

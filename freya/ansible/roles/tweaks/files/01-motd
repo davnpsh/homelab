@@ -1,0 +1,51 @@
+#!/bin/bash
+
+# --- Colors ---
+LIGHT_BLUE="\e[38;2;173;216;230m"
+CYAN="\e[36m"
+RESET="\e[0m"
+
+# --- Logo ---
+echo
+printf "${LIGHT_BLUE}███████████                                        ${RESET}\n"
+printf "${LIGHT_BLUE}▒▒███▒▒▒▒▒▒█                                        ${RESET}\n"
+printf "${LIGHT_BLUE} ▒███   █ ▒  ████████   ██████  █████ ████  ██████  ${RESET}\n"
+printf "${LIGHT_BLUE} ▒███████   ▒▒███▒▒███ ███▒▒███▒▒███ ▒███  ▒▒▒▒▒███ ${RESET}\n"
+printf "${LIGHT_BLUE} ▒███▒▒▒█    ▒███ ▒▒▒ ▒███████  ▒███ ▒███   ███████ ${RESET}\n"
+printf "${LIGHT_BLUE} ▒███  ▒     ▒███     ▒███▒▒▒   ▒███ ▒███  ███▒▒███ ${RESET}\n"
+printf "${LIGHT_BLUE} █████       █████    ▒▒██████  ▒▒███████ ▒▒████████${RESET}\n"
+printf "${LIGHT_BLUE}▒▒▒▒▒       ▒▒▒▒▒      ▒▒▒▒▒▒    ▒▒▒▒▒███  ▒▒▒▒▒▒▒▒ ${RESET}\n"
+printf "${LIGHT_BLUE}                                 ███ ▒███           ${RESET}\n"
+printf "${LIGHT_BLUE}                                ▒▒██████            ${RESET}\n"
+printf "${LIGHT_BLUE}                                 ▒▒▒▒▒▒             ${RESET}\n"
+echo
+
+
+# --- Status ---
+host=$(hostname)
+os=$(grep '^PRETTY_NAME' /etc/os-release | cut -d= -f2 | tr -d '"')
+kernel=$(uname -r)
+uptime=$(uptime -p | sed 's/up //')
+load_avg=$(cut -d ' ' -f1 /proc/loadavg)
+cores=$(nproc)
+load_pct=$(awk -v l="$load_avg" -v c="$cores" 'BEGIN { printf "%.2f", (l/c)*100 }')
+mem_used=$(free -h | awk '/Mem:/ {print $3}')
+mem_total=$(free -h | awk '/Mem:/ {print $2}')
+
+disk_root_used=$(df -h / | awk 'NR==2 {print $3}')
+disk_root_total=$(df -h / | awk 'NR==2 {print $2}')
+
+disk_cinema_used=$(df -h /media/cinema 2>/dev/null | awk 'NR==2 {print $3}')
+disk_cinema_total=$(df -h /media/cinema 2>/dev/null | awk 'NR==2 {print $2}')
+
+disk_library_used=$(df -h /media/library 2>/dev/null | awk 'NR==2 {print $3}')
+disk_library_total=$(df -h /media/library 2>/dev/null | awk 'NR==2 {print $2}')
+
+printf "${LIGHT_BLUE}%s${RESET} | ${CYAN}%s${RESET} | kernel ${CYAN}%s${RESET} | up ${CYAN}%s${RESET} | load ${CYAN}%s%%%s${RESET} | mem ${CYAN}%s/%s${RESET} | root / ${CYAN}%s/%s${RESET} | cinema ${CYAN}%s/%s${RESET} | library ${CYAN}%s/%s${RESET}\n" \
+"$host" "$os" "$kernel" "$uptime" "$load_pct" "" \
+"$mem_used" "$mem_total" \
+"$disk_root_used" "$disk_root_total" \
+"$disk_cinema_used" "$disk_cinema_total" \
+"$disk_library_used" "$disk_library_total"
+
+echo

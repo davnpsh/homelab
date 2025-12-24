@@ -1,0 +1,3 @@
+- name: Set the hostname to freya
+  ansible.builtin.hostname:
+    name: freya
