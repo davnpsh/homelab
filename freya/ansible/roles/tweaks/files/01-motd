@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # --- Colors ---
-LIGHT_BLUE="\e[38;2;173;216;230m"
+LIGHT_BLUE="\e[38;2;80;200;255m"
 CYAN="\e[36m"
 RESET="\e[0m"
 

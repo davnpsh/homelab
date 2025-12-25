@@ -33,9 +33,22 @@
 
 # This will only work for amd64 arch
 # For other archs, specify it in [arch=..., or find a way to replace with a variable
+# - name: Add Docker APT repository
+#   ansible.builtin.apt_repository:
+#     repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian {{ ansible_facts['distribution_release'] }} stable"
+#     state: present
+
 - name: Add Docker APT repository
-  ansible.builtin.apt_repository:
-    repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian {{ ansible_facts['distribution_release'] }} stable"
+  ansible.builtin.deb822_repository:
+    name: docker
+    types: deb
+    uris:
+      - https://download.docker.com/linux/debian
+    suites:
+      - "{{ ansible_facts['distribution_release'] }}"
+    components:
+      - stable
+    signed_by: /etc/apt/keyrings/docker.asc
     state: present
 
 - name: Install Docker packages

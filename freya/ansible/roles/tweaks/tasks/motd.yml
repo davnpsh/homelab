@@ -1,3 +1,11 @@
+- name: Silence static Debian MOTD
+  ansible.builtin.copy:
+    dest: /etc/motd
+    content: ""
+    owner: root
+    group: root
+    mode: "0644"
+
 - name: Disable update-motd.d original scripts
   ansible.builtin.shell: chmod -x /etc/update-motd.d/*
 
