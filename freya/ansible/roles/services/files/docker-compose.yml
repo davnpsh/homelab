@@ -1,0 +1,149 @@
+services:
+  vpn:
+    # Ports used: 53, 80, 81, 443
+    container_name: vpn
+    image: tailscale/tailscale:latest
+    hostname: freya
+    restart: unless-stopped
+    labels:
+      glance.name: Tailscale
+      glance.icon: sh:tailscale-light
+      glance.description: VPN
+      glance.hide: false
+    environment:
+      - TS_AUTHKEY=${TS_AUTHKEY}
+      - TS_STATE_DIR=/var/lib/tailscale
+      - TS_USERSPACE=false
+    volumes:
+      - ./tailscale/state:/var/lib/tailscale
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    cap_add:
+      - net_admin
+    healthcheck:
+      test: ["CMD-SHELL", "tailscale status --self"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  proxy:
+    # Ports used: see `vpn` service
+    container_name: proxy
+    image: "jc21/nginx-proxy-manager:latest"
+    restart: unless-stopped
+    labels:
+      glance.name: Proxy
+      glance.icon: sh:nginx-proxy-manager-light
+      glance.url: ${PROXY_PANEL_URL}
+      glance.description: Proxy & port forwarding
+      glance.hide: false
+    environment:
+      - TZ=${TZ}
+    volumes:
+      - ./proxy/data:/data
+      - ./proxy/letsencrypt:/etc/letsencrypt
+    network_mode: service:vpn
+    healthcheck:
+      test: ["CMD", "/usr/bin/check-health"]
+      interval: 10s
+      timeout: 3s
+    depends_on:
+      vpn:
+        condition: service_healthy
+
+  torrents-ui:
+    # Ports used: 7476
+    container_name: torrents-ui
+    image: ghcr.io/hotio/qui
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+      - TZ=${TZ}
+    volumes:
+      - ./torrents-ui/config:/config
+    depends_on:
+      proxy:
+        condition: service_healthy
+      cinema-torrents:
+        condition: service_started
+
+  #########################
+  #     L I B R A R Y     #
+  #########################
+
+  #######################
+  #     C I N E M A     #
+  #######################
+
+  cinema-torrents:
+    # Ports used: 8080
+    container_name: cinema-torrents
+    image: ghcr.io/hotio/qbittorrent
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+      - TZ=${TZ}
+      - WEBUI_PORTS=8080/tcp,8080/udp
+      - LIBTORRENT=v1
+    volumes:
+      - ./cinema/torrents/config:/config
+      - /media/cinema/torrents:/data/torrents
+
+  prowlarr:
+    # Ports used: 9696
+    container_name: prowlarr
+    image: ghcr.io/hotio/prowlarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+      - TZ=${TZ}
+    volumes:
+      - ./cinema/prowlarr/config:/config
+
+  sonarr:
+    # Ports used: 8989
+    container_name: sonarr
+    image: ghcr.io/hotio/sonarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+      - TZ=${TZ}
+    volumes:
+      - ./cinema/sonarr/config:/config
+      - /media/cinema:/data
+
+  radarr:
+    # Ports used: 7878
+    container_name: radarr
+    image: ghcr.io/hotio/radarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+      - TZ=${TZ}
+    volumes:
+      - ./cinema/radarr/config:/config
+      - /media/cinema:/data
+
+  tv:
+    # Ports used: 8096
+    container_name: tv
+    image: ghcr.io/hotio/jellyfin
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+      - TZ=${TZ}
+    # Hardware acceleration
+    group_add:
+      - "992" # 'render' group
+    devices:
+      - /dev/dri/renderD128:/dev/dri/renderD128
+    volumes:
+      - ./cinema/tv/config:/config
+      - /media/cinema/tv:/data/tv
