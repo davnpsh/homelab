@@ -75,6 +75,16 @@ services:
       cinema-torrents:
         condition: service_started
 
+  glance-agent:
+    # Ports used: 27973
+    container_name: glance-agent
+    image: glanceapp/agent
+    environment:
+      - TOKEN=${GLANCE_AGENT_TOKEN}
+    volumes:
+      - /media/library:/storage/library:ro
+      - /media/cinema:/storage/cinema:ro
+
   socket-proxy:
     # This image is used to expose the docker socket as read-only
     # Ports used: 2375

@@ -76,8 +76,7 @@ pages:
               - type: docker-containers
                 title: Freya
                 hide-by-default: true
-                # TODO: Find a way to communicate to Freya
-                sock-path: /dev/null
+                sock-path: ${FREYA_DOCKER_SOCKET}
 
           - type: hacker-news
 
@@ -104,6 +103,10 @@ pages:
             servers:
               - type: local
                 name: Odin
+              - type: remote
+                name: Freya
+                url: ${FREYA_GLANCE_AGENT_HOST}
+                token: ${FREYA_GLANCE_AGENT_TOKEN}
 
           - type: dns-stats
             service: adguard

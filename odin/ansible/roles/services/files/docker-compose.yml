@@ -119,6 +119,9 @@ services:
       DNS_PANEL_PASSWORD: ${DNS_PANEL_PASSWORD}
       TS_APIKEY: ${TS_APIKEY}
       WUD_URL: ${WUD_URL}
+      FREYA_GLANCE_AGENT_HOST: ${FREYA_GLANCE_AGENT_HOST}
+      FREYA_GLANCE_AGENT_TOKEN: ${FREYA_GLANCE_AGENT_TOKEN}
+      FREYA_DOCKER_SOCKET: ${FREYA_DOCKER_SOCKET}
     volumes:
       #- /var/run/docker.sock:/var/run/docker.sock
       #- "socket-proxy.run:/var/run"
@@ -184,6 +187,10 @@ services:
 
       # Odin watcher
       WUD_WATCHER_ODIN_HOST: socket-proxy
+      # Freya watcher
+      #WUD_WATCHER_FREYA_SOCKET: ${FREYA_DOCKER_SOCKET}
+      #WUD_WATCHER_FREYA_HOST: ${WUD_FREYA_DOCKER_HOST}
+      #WUD_WATCHER_FREYA_PORT: ${WUD_FREYA_DOCKER_PORT}
     #volumes:
     #- /var/run/docker.sock:/var/run/docker.sock  # insecure
     # - "socket-proxy.run:/var/run"               # secure (local)
