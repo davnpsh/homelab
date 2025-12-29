@@ -75,6 +75,18 @@ services:
       cinema-torrents:
         condition: service_started
 
+  socket-proxy:
+    # This image is used to expose the docker socket as read-only
+    # Ports used: 2375
+    container_name: socket-proxy
+    image: "11notes/socket-proxy:2.1.6"
+    restart: "always"
+    read_only: true
+    user: "0:989"
+    volumes:
+      - "/run/docker.sock:/run/docker.sock:ro"
+      - "socket-proxy.run:/run/proxy"
+
   #########################
   #     L I B R A R Y     #
   #########################
@@ -177,3 +189,6 @@ services:
     volumes:
       - ./cinema/tv/config:/config
       - /media/cinema/tv:/data/tv
+
+volumes:
+  socket-proxy.run:
