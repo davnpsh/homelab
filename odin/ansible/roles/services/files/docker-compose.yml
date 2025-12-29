@@ -1,7 +1,7 @@
 services:
   vpn:
     # Ports used: 53, 80, 81, 443
-    container_name: odin-vpn
+    container_name: vpn
     image: tailscale/tailscale:latest
     hostname: odin
     restart: unless-stopped
@@ -12,15 +12,6 @@ services:
       glance.hide: false
     environment:
       - TS_AUTHKEY=${TS_AUTHKEY}
-      # ---
-      # According to documentation in https://tailscale.com/kb/1282/docker
-      # --advertise-tags is an argument you can pass in to the Tailscale CLI in
-      # a `tailscale up` command using TS_EXTRA_ARGS, but using this variable
-      # with this argument will make the container exit with error, because, in reality,
-      # you advertise tags in a `tailscale login` command, as seen in
-      # https://tailscale.com/kb/1080/cli#login
-      # ---
-      #- TS_EXTRA_ARGS=--advertise-tags=tag:container
       - TS_STATE_DIR=/var/lib/tailscale
       - TS_USERSPACE=false
     volumes:
@@ -38,7 +29,7 @@ services:
 
   proxy:
     # Ports used: see `vpn` service
-    container_name: odin-proxy
+    container_name: proxy
     image: "jc21/nginx-proxy-manager:latest"
     restart: unless-stopped
     labels:
@@ -48,7 +39,7 @@ services:
       glance.description: Proxy & port forwarding
       glance.hide: false
     environment:
-      TZ: ${PROXY_TZ}
+      - TZ=${TZ}
     volumes:
       - ./proxy/data:/data
       - ./proxy/letsencrypt:/etc/letsencrypt
@@ -64,7 +55,7 @@ services:
   socket-proxy:
     # This image is used to expose the docker socket as read-only
     # Ports used: 2375
-    container_name: odin-socket-proxy
+    container_name: socket-proxy
     image: "11notes/socket-proxy:2.1.6"
     restart: "always"
     read_only: true
@@ -75,7 +66,7 @@ services:
 
   dns:
     # Ports used: 53, 3000
-    container_name: odin-dns
+    container_name: dns
     image: adguard/adguardhome
     restart: unless-stopped
     labels:
@@ -103,7 +94,7 @@ services:
 
   dashboard:
     # Ports used: 8080
-    container_name: odin-dashboard
+    container_name: dashboard
     image: glanceapp/glance
     restart: unless-stopped
     # read_only: true
@@ -114,17 +105,15 @@ services:
       glance.description: Home & status
       glance.hide: false
     environment:
-      DNS_PANEL_URL: ${DNS_PANEL_INTERNAL_URL}
-      DNS_PANEL_USERNAME: ${DNS_PANEL_USERNAME}
-      DNS_PANEL_PASSWORD: ${DNS_PANEL_PASSWORD}
-      TS_APIKEY: ${TS_APIKEY}
-      WUD_URL: ${WUD_URL}
-      FREYA_GLANCE_AGENT_HOST: ${FREYA_GLANCE_AGENT_HOST}
-      FREYA_GLANCE_AGENT_TOKEN: ${FREYA_GLANCE_AGENT_TOKEN}
-      FREYA_DOCKER_SOCKET: ${FREYA_DOCKER_SOCKET}
+      - DNS_PANEL_URL=${DNS_PANEL_INTERNAL_URL}
+      - DNS_PANEL_USERNAME=${DNS_PANEL_USERNAME}
+      - DNS_PANEL_PASSWORD=${DNS_PANEL_PASSWORD}
+      - TS_APIKEY=${TS_APIKEY}
+      - WUD_URL=${WUD_URL}
+      - FREYA_GLANCE_AGENT_HOST=${FREYA_GLANCE_AGENT_HOST}
+      - FREYA_GLANCE_AGENT_TOKEN=${FREYA_GLANCE_AGENT_TOKEN}
+      - FREYA_DOCKER_SOCKET=${FREYA_DOCKER_SOCKET}
     volumes:
-      #- /var/run/docker.sock:/var/run/docker.sock
-      #- "socket-proxy.run:/var/run"
       - ./dashboard/config:/app/config
     depends_on:
       proxy:
@@ -132,7 +121,7 @@ services:
 
   bookmarks:
     # Ports used: 8080
-    container_name: odin-bookmarks
+    container_name: bookmarks
     image: ghcr.io/go-shiori/shiori
     restart: unless-stopped
     labels:
@@ -142,8 +131,8 @@ services:
       glance.description: Save links
       glance.hide: false
     environment:
-      SHIORI_DIR: /srv/shiori
-      SHIORI_HTTP_SECRET_KEY: ${BOOKMARKS_HTTP_SECRET_KEY}
+      - SHIORI_DIR=/srv/shiori
+      - SHIORI_HTTP_SECRET_KEY=${BOOKMARKS_HTTP_SECRET_KEY}
     volumes:
       - ./bookmarks/shiori:/srv/shiori
     depends_on:
@@ -152,7 +141,7 @@ services:
 
   pdf:
     # Ports used: 8080
-    container_name: odin-pdf
+    container_name: pdf
     image: bentopdf/bentopdf-simple:latest
     restart: unless-stopped
     labels:
@@ -167,7 +156,7 @@ services:
 
   updates:
     # Ports used: 3000
-    container_name: odin-updates
+    container_name: updates
     image: getwud/wud
     read_only: true
     labels:
@@ -177,23 +166,18 @@ services:
       glance.description: See updates
       glance.hide: false
     environment:
-      #WUD_AUTH_BASIC_MY_USER: ${WUD_AUTH_BASIC_MY_USER}
-      #WUD_AUTH_BASIC_MY_HASH: ${WUD_AUTH_BASIC_MY_HASH}
-      WUD_TRIGGER_NTFY_PUBLIC_URL: ${WUD_TRIGGER_NTFY_PUBLIC_URL}
-      WUD_TRIGGER_NTFY_PUBLIC_TOPIC: ${WUD_TRIGGER_NTFY_PUBLIC_TOPIC}
-      WUD_TRIGGER_NTFY_PUBLIC_SIMPLETITLE: New $${container.updateKind.kind} found for container $${container.name}
+      - WUD_TRIGGER_NTFY_PUBLIC_URL=${WUD_TRIGGER_NTFY_PUBLIC_URL}
+      - WUD_TRIGGER_NTFY_PUBLIC_TOPIC=${WUD_TRIGGER_NTFY_PUBLIC_TOPIC}
+      - WUD_TRIGGER_NTFY_PUBLIC_SIMPLETITLE=New $${container.updateKind.kind} found for container $${container.name}
       # I feel more comfortable updating manually :)
       # WUD_TRIGGER_DOCKER_LOCAL_PRUNE: true
 
+      # ---  WATCHERS ---
       # Odin watcher
-      WUD_WATCHER_ODIN_HOST: socket-proxy
-      # Freya watcher
-      #WUD_WATCHER_FREYA_SOCKET: ${FREYA_DOCKER_SOCKET}
+      - WUD_WATCHER_ODIN_HOST=socket-proxy
+      # Freya watcher (not connecting for now)
       #WUD_WATCHER_FREYA_HOST: ${WUD_FREYA_DOCKER_HOST}
       #WUD_WATCHER_FREYA_PORT: ${WUD_FREYA_DOCKER_PORT}
-    #volumes:
-    #- /var/run/docker.sock:/var/run/docker.sock  # insecure
-    # - "socket-proxy.run:/var/run"               # secure (local)
 
 volumes:
   socket-proxy.run:
