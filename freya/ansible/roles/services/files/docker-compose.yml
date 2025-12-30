@@ -56,6 +56,7 @@ services:
     # Ports used: 7476
     container_name: torrents-ui
     image: ghcr.io/hotio/qui
+    restart: unless-stopped
     labels:
       glance.name: Torrents
       glance.icon: sh:qbittorrent-light
@@ -79,6 +80,7 @@ services:
     # Ports used: 27973
     container_name: glance-agent
     image: glanceapp/agent
+    restart: unless-stopped
     environment:
       - TOKEN=${GLANCE_AGENT_TOKEN}
     volumes:
@@ -90,7 +92,7 @@ services:
     # Ports used: 2375
     container_name: socket-proxy
     image: "11notes/socket-proxy:2.1.6"
-    restart: "always"
+    restart: unless-stopped
     read_only: true
     user: "0:989"
     volumes:
@@ -109,6 +111,7 @@ services:
     # Ports used: 8080
     container_name: cinema-torrents
     image: ghcr.io/hotio/qbittorrent
+    restart: unless-stopped
     environment:
       - PUID=1000
       - PGID=1000
@@ -124,6 +127,7 @@ services:
     # Ports used: 9696
     container_name: prowlarr
     image: ghcr.io/hotio/prowlarr
+    restart: unless-stopped
     labels:
       glance.name: Prowlarr
       glance.icon: sh:prowlarr-light
@@ -142,6 +146,7 @@ services:
     # Ports used: 8989
     container_name: sonarr
     image: ghcr.io/hotio/sonarr
+    restart: unless-stopped
     labels:
       glance.name: Sonarr
       glance.icon: sh:sonarr-light
@@ -161,6 +166,7 @@ services:
     # Ports used: 7878
     container_name: radarr
     image: ghcr.io/hotio/radarr
+    restart: unless-stopped
     labels:
       glance.name: Radarr
       glance.icon: sh:radarr-light
@@ -180,6 +186,7 @@ services:
     # Ports used: 8096
     container_name: tv
     image: ghcr.io/hotio/jellyfin
+    restart: unless-stopped
     labels:
       glance.name: TV
       glance.icon: sh:jellyfin-light
