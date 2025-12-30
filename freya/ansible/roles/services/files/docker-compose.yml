@@ -103,6 +103,51 @@ services:
   #     L I B R A R Y     #
   #########################
 
+  books:
+    # Ports used: 8083
+    container_name: books
+    image: crocodilestick/calibre-web-automated:latest
+    restart: unless-stopped
+    labels:
+      glance.name: Books
+      glance.icon: sh:calibre-web-light
+      glance.url: ${BOOKS_PANEL_URL}
+      glance.description: Read
+      glance.hide: false
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=${TZ}
+      #- HARDCOVER_TOKEN=${BOOKS_HARDCOVER_TOKEN}
+    volumes:
+      - ./library/books/config:/config
+      # Ingest directory
+      - /media/library/books/ingest:/cwa-book-ingest
+      # Actual library
+      - /media/library/books/library:/calibre-library
+      # Future plugins
+      #- /path/to/your/calibre/plugins/folder:/config/.config/calibre/plugins
+
+  books-downloader:
+    # Ports used: 8084
+    image: ghcr.io/calibrain/calibre-web-automated-book-downloader:latest
+    container_name: books-downloader
+    restart: unless-stopped
+    labels:
+      glance.name: Books downloader
+      glance.icon: mdi:book-plus-multiple
+      glance.url: ${BOOKS_DOWNLOADER_PANEL_URL}
+      glance.description: Download books
+      glance.hide: false
+    environment:
+      TZ: ${TZ}
+    volumes:
+      - ./library/books-downloader/config:/config # Configuration files and database
+      # Ingest directory
+      - /media/library/books/ingest:/cwa-book-ingest
+      # Download client volume - required for Prowlarr/torrent/usenet integration
+      # - /mnt/storage/downloads:/data/torrents
+
   #######################
   #     C I N E M A     #
   #######################
