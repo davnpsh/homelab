@@ -4,20 +4,67 @@ This is collection of configuration files and ansible playbooks that will serve 
 
 This is a *work in progress* and I'd like to continue adding a lot of features and/or services in the future.
 
+## Design philosophy
+
+Each instance must comply with these rules:
+
+1. No personal information.
+2. Information must be volatile.
+3. Infrastructure must be declarative and reproducible.
+
 ## Hardware
 
-| Instance | Purpose | Size |  |
+| Instance | Codename | Purpose | Size |
 |----------|----------|----------|----------|
-| Home server | Serve media content (such as shows and movies) | Mini-PC Intel 12th Gen N100 Processor with 16GB RAM, 512GB M.2 SSD and 2TB SATA SSD | <img src="./_static/kamrui.jpg" width="140" /> |
-| Personal VPS | Be a 24/7 instance with always-available services | Oracle `VM.Standard.E2.1.Micro` instance with 1 OCPU and 1GB RAM | <img src="./_static/oracle.webp" width="140" /> |
+| Home server | **Freya** | Media content server | Intel 12th Gen N100, 16GB RAM, 512GB M.2 SSD, 2TB SATA SSD |
+| Personal VPS | **Odin** | Tools and services | 1 OCPU, 1GB RAM |
+| VPS | **Magni** | Hosting for my website | 1 OCPU, 1GB RAM |
+
+## Filesystem
+
+### Freya
+
+**OS:** Debian
+
+#### LVM
+
+![Design](./_static/fs_freya_lvm.png)
+
+- `pv_internal` is designated for the internal SSD, whereas `pv_external` is allocated for the external SSD. The `lv_cinema` volume encompasses the entire disk, as I prefer to keep shows and movies off the internal SSD to avoid the frequent write cycle burden.
+
+- `lv_os` contains an OS for headless use, while `lv_os_backup` contains the same OS, but with a graphical session.
+
+- `lv_library` is designed to hold my library of books and `lv_cinema` my shows and movies.
+
+#### Volumes
+
+![Design](./_static/fs_freya_volumes.png)
+
+- `lv_os` also contains the configuration files for the Docker services used. Such files are separated by the type of service (`library` or `cinema`). If this separation does not apply, then the files just live at `~/services`.
+
+- `lv_library` is mapped at `/media/library`. Books are inside `books`.
+
+- `lv_cinema` is mapped at `/media/cinema`. Downloading and seeding torrents are inside `torrents`, while shows and movies are inside `tv`.
+
+### Odin
+
+**OS:** Ubuntu
+
+![Design](./_static/fs_odin.png)
+
+In the user's home directory, all configuration files are inside `~/services` directory.
+
+### Magni
+
+_Currently not in use._
 
 ## Design
 
-Currently and in the near future I won't be self-hosting any personal or sensitive content (such as password managers or files/photos) because I already use services that have way better security and also, I don't generate that much personal data.
-
-A core concept I was focusing on while designing this was **volatility**, which basically means that I don't care if there is data loss at some point because I don't and won't be hosting personal, critical or sensitive content to begin with.
-
 ![Design](./_static/design.png)
+
+Both instances are connected to my Tailnet using a Tailscale Docker container as a sidecar. It is bound to a Nginx container that handles the reverse proxy functionality.
+
+Services in different instances can communicate with each other using **Nginx streams**.
 
 ## Setup
 
@@ -72,8 +119,8 @@ ansible-playbook --ask-become-pass setup.yml --skip-tags root
 #
 
 <div>
-    <img src="./_static/linux-p.gif" alt="GIF 1" style="display: inline-block; margin: 10px;" />
-    <img src="./_static/debian-powered.gif" alt="GIF 2" style="display: inline-block; margin: 10px;" />
-    <img src="./_static/ubuntu-88x31.gif" alt="GIF 3" style="display: inline-block; margin: 10px;" />
-    <img src="./_static/blink-0.gif" alt="GIF 3" style="display: inline-block; margin: 10px;" />
+    <img src="./_static/badges/linux-p.gif" alt="GIF 1" style="display: inline-block; margin: 10px;" />
+    <img src="./_static/badges/debian-powered.gif" alt="GIF 2" style="display: inline-block; margin: 10px;" />
+    <img src="./_static/badges/ubuntu-88x31.gif" alt="GIF 3" style="display: inline-block; margin: 10px;" />
+    <img src="./_static/badges/blink-0.gif" alt="GIF 3" style="display: inline-block; margin: 10px;" />
 </div>
