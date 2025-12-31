@@ -60,7 +60,7 @@ _Currently not in use._
 
 ## Design
 
-![Design](./_static/design.png?)
+![Design](./_static/design_v2.png)
 
 Both instances are connected to my Tailnet using a Tailscale Docker container as a sidecar. It is bound to a Nginx container that handles the reverse proxy functionality.
 
