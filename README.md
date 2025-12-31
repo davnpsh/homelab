@@ -24,6 +24,8 @@ Each instance must comply with these rules:
 
 ### Freya
 
+<img src="./_static/debian.webp" alt="Example Image" style="width: 50px;"/>
+
 **OS:** Debian
 
 #### LVM
@@ -38,7 +40,7 @@ Each instance must comply with these rules:
 
 #### Volumes
 
-![Design](./_static/fs_freya_volumes.png)
+![Design](./_static/fs_freya_volumes_v2.png)
 
 - `lv_os` also contains the configuration files for the Docker services used. Such files are separated by the type of service (`library` or `cinema`). If this separation does not apply, then the files just live at `~/services`.
 
@@ -47,6 +49,8 @@ Each instance must comply with these rules:
 - `lv_cinema` is mapped at `/media/cinema`. Downloading and seeding torrents are inside `torrents`, while shows and movies are inside `tv`.
 
 ### Odin
+
+<img src="./_static/ubuntu.webp" alt="Example Image" style="width: 50px;"/>
 
 **OS:** Ubuntu
 
