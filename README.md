@@ -4,6 +4,12 @@ This is collection of configuration files and ansible playbooks that will serve 
 
 This is a *work in progress* and I'd like to continue adding a lot of features and/or services in the future.
 
+- [Design philosophy](#design-philosophy)
+- [Hardware](#hardware)
+- [Filesystem](#filesystem)
+- [Design](#design)
+- [Setup](#setup)
+
 ## Design philosophy
 
 Each instance must comply with these rules:
