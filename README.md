@@ -9,6 +9,7 @@ This is a *work in progress* and I'd like to continue adding a lot of features a
 - [Filesystem](#filesystem)
 - [Design](#design)
 - [Setup](#setup)
+- [Maintenance](#maintenance)
 
 ## Design philosophy
 
@@ -124,6 +125,16 @@ ansible-playbook --ask-become-pass setup.yml --tags root
 
 ```bash
 ansible-playbook --ask-become-pass setup.yml --skip-tags root
+```
+
+## Maintenance
+
+### Updates
+
+Inside the `~/services` directory of each instance there is a `update.sh` file that updates the respective Docker services. Just run:
+
+```bash
+bash update.sh
 ```
 
 #
