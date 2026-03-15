@@ -125,12 +125,10 @@ services:
       - /media/library/books/ingest:/cwa-book-ingest
       # Actual library
       - /media/library/books/library:/calibre-library
-      # Future plugins
-      #- /path/to/your/calibre/plugins/folder:/config/.config/calibre/plugins
 
   books-downloader:
     # Ports used: 8084
-    image: ghcr.io/calibrain/calibre-web-automated-book-downloader:latest
+    image: ghcr.io/calibrain/shelfmark:latest
     container_name: books-downloader
     restart: unless-stopped
     labels:
@@ -142,11 +140,10 @@ services:
     environment:
       TZ: ${TZ}
     volumes:
-      - ./library/books-downloader/config:/config # Configuration files and database
+      # Configuration files and database
+      - ./library/books-downloader/config:/config 
       # Ingest directory
-      - /media/library/books/ingest:/cwa-book-ingest
-      # Download client volume - required for Prowlarr/torrent/usenet integration
-      # - /mnt/storage/downloads:/data/torrents
+      - /media/library/books/ingest:/books
 
   #######################
   #     C I N E M A     #
