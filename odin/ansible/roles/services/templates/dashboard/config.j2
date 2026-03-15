@@ -1,0 +1,46 @@
+title: Dashboard
+lang: en
+theme: dark
+checkUpdates: false
+tags:
+  - name: VPS
+    color: red
+  - name: HomeLab
+    color: blue
+
+services:
+  VPS:
+    - title: VPN
+      description: Connectivity
+      link: https://login.tailscale.com/admin/machines
+      icon:
+        name: simple-icons:tailscale
+        wrap: true
+        
+    - title: Proxy
+      description: Proxy & port forwarding
+      link: https://proxy.odin.{{host.domain}}
+      icon:
+        name: simple-icons:nginxproxymanager
+        wrap: true
+        
+    - title: DNS
+      description: Internal domain routing
+      link: https://dns.odin.{{host.domain}}
+      icon:
+        name: simple-icons:adguard
+        wrap: true
+        
+    - title: Bookmarks
+      description: Save links
+      link: https://bookmarks.odin.{{host.domain}}
+      icon:
+        name: simple-icons:karakeep
+        wrap: true
+        
+    - title: PDF
+      description: Edit PDFs
+      link: https://pdf.odin.{{host.domain}}
+      icon:
+        name: simple-icons:bento
+        wrap: true

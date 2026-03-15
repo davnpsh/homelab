@@ -5,11 +5,6 @@ services:
     image: tailscale/tailscale:latest
     hostname: odin
     restart: unless-stopped
-    labels:
-      glance.name: Tailscale
-      glance.icon: sh:tailscale-light
-      glance.description: VPN
-      glance.hide: false
     environment:
       - TS_AUTHKEY=${TS_AUTHKEY}
       - TS_STATE_DIR=/var/lib/tailscale
@@ -32,12 +27,6 @@ services:
     container_name: proxy
     image: "jc21/nginx-proxy-manager:latest"
     restart: unless-stopped
-    labels:
-      glance.name: Proxy
-      glance.icon: sh:nginx-proxy-manager-light
-      glance.url: ${PROXY_PANEL_URL}
-      glance.description: Proxy & port forwarding
-      glance.hide: false
     environment:
       - TZ=${TZ}
     volumes:
@@ -52,29 +41,11 @@ services:
       vpn:
         condition: service_healthy
 
-  socket-proxy:
-    # This image is used to expose the docker socket as read-only
-    # Ports used: 2375
-    container_name: socket-proxy
-    image: "11notes/socket-proxy:2.1.6"
-    restart: "always"
-    read_only: true
-    user: "0:988"
-    volumes:
-      - "/run/docker.sock:/run/docker.sock:ro"
-      - "socket-proxy.run:/run/proxy"
-
   dns:
     # Ports used: 53, 3000
     container_name: dns
     image: adguard/adguardhome
     restart: unless-stopped
-    labels:
-      glance.name: DNS
-      glance.icon: sh:adguard-home-light
-      glance.url: ${DNS_PANEL_URL}
-      glance.description: Plain DNS
-      glance.hide: false
     volumes:
       - ./dns/work:/opt/adguardhome/work
       - ./dns/conf:/opt/adguardhome/conf
@@ -93,28 +64,12 @@ services:
         condition: service_healthy
 
   dashboard:
-    # Ports used: 8080
+    # Ports used: 3000
     container_name: dashboard
-    image: glanceapp/glance
+    image: hywax/mafl
     restart: unless-stopped
-    # read_only: true
-    labels:
-      glance.name: Dashboard
-      glance.icon: sh:glance-light
-      glance.url: ${DASHBOARD_PANEL_URL}
-      glance.description: Home & status
-      glance.hide: false
-    environment:
-      - DNS_PANEL_URL=${DNS_PANEL_INTERNAL_URL}
-      - DNS_PANEL_USERNAME=${DNS_PANEL_USERNAME}
-      - DNS_PANEL_PASSWORD=${DNS_PANEL_PASSWORD}
-      - TS_APIKEY=${TS_APIKEY}
-      - WUD_URL=${WUD_URL}
-      - FREYA_GLANCE_AGENT_HOST=${FREYA_GLANCE_AGENT_HOST}
-      - FREYA_GLANCE_AGENT_TOKEN=${FREYA_GLANCE_AGENT_TOKEN}
-      - FREYA_DOCKER_SOCKET=${FREYA_DOCKER_SOCKET}
     volumes:
-      - ./dashboard/config:/app/config
+      - ./dashboard:/app/data
     depends_on:
       proxy:
         condition: service_healthy
@@ -124,12 +79,6 @@ services:
     container_name: bookmarks
     image: ghcr.io/go-shiori/shiori
     restart: unless-stopped
-    labels:
-      glance.name: Bookmarks
-      glance.icon: mdi:bookmark-box
-      glance.url: ${BOOKMARKS_PANEL_URL}
-      glance.description: Save links
-      glance.hide: false
     environment:
       - SHIORI_DIR=/srv/shiori
       - SHIORI_HTTP_SECRET_KEY=${BOOKMARKS_HTTP_SECRET_KEY}
@@ -139,45 +88,17 @@ services:
       proxy:
         condition: service_healthy
 
-  pdf:
-    # Ports used: 8080
-    container_name: pdf
-    image: bentopdf/bentopdf-simple:latest
-    restart: unless-stopped
-    labels:
-      glance.name: PDF tools
-      glance.icon: sh:bentopdf-light
-      glance.url: ${PDF_PANEL_URL}
-      glance.description: Edit PDFs
-      glance.hide: false
-    depends_on:
-      proxy:
-        condition: service_healthy
-
-  updates:
-    # Ports used: 3000
-    container_name: updates
-    image: getwud/wud
-    read_only: true
-    labels:
-      glance.name: Updates
-      glance.icon: sh:docker-light
-      glance.url: ${WUD_PANEL_URL}
-      glance.description: See updates
-      glance.hide: false
-    environment:
-      - WUD_TRIGGER_NTFY_PUBLIC_URL=${WUD_TRIGGER_NTFY_PUBLIC_URL}
-      - WUD_TRIGGER_NTFY_PUBLIC_TOPIC=${WUD_TRIGGER_NTFY_PUBLIC_TOPIC}
-      - WUD_TRIGGER_NTFY_PUBLIC_SIMPLETITLE=New $${container.updateKind.kind} found for container $${container.name}
-      # I feel more comfortable updating manually :)
-      # WUD_TRIGGER_DOCKER_LOCAL_PRUNE: true
-
-      # ---  WATCHERS ---
-      # Odin watcher
-      - WUD_WATCHER_ODIN_HOST=socket-proxy
-      # Freya watcher (not connecting for now)
-      #WUD_WATCHER_FREYA_HOST: ${WUD_FREYA_DOCKER_HOST}
-      #WUD_WATCHER_FREYA_PORT: ${WUD_FREYA_DOCKER_PORT}
-
-volumes:
-  socket-proxy.run:
+  # pdf:
+  #   # Ports used: 8080
+  #   container_name: pdf
+  #   image: bentopdf/bentopdf-simple:latest
+  #   restart: unless-stopped
+  #   labels:
+  #     glance.name: PDF tools
+  #     glance.icon: sh:bentopdf-light
+  #     glance.url: ${PDF_PANEL_URL}
+  #     glance.description: Edit PDFs
+  #     glance.hide: false
+  #   depends_on:
+  #     proxy:
+  #       condition: service_healthy

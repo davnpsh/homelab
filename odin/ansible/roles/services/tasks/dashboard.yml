@@ -1,17 +1,11 @@
 - name: Create dashboard config directory
   ansible.builtin.file:
-    path: "{{ ansible_facts.user_dir }}/services/dashboard/config"
+    path: "{{ ansible_facts.user_dir }}/services/dashboard"
     state: directory
     mode: "0755"
 
-- name: Copy glance.yml to dashboard config
-  ansible.builtin.copy:
-    src: glance.yml
-    dest: "{{ ansible_facts.user_dir }}/services/dashboard/config/glance.yml"
+- name: Render dashboard config from template
+  ansible.builtin.template:
+    src: dashboard/config.j2
+    dest: "{{ ansible_facts.user_dir }}/services/dashboard/config.yml"
     mode: "0644"
-
-- name: Copy custom widgets directory
-  ansible.builtin.copy:
-    src: custom_widgets
-    dest: "{{ ansible_facts.user_dir }}/services/dashboard/config/"
-    mode: "1644"
