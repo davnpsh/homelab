@@ -129,6 +129,14 @@ ansible-playbook --ask-become-pass setup.yml --skip-tags root
 
 ## Maintenance
 
+### Stack
+
+If the services stack is modified/updated, changes can be applied by running:
+
+```bash
+ansible-playbook setup.yml --tags services
+```
+
 ### Updates
 
 Inside the `~/services` directory of each instance there is a `update.sh` file that updates the respective Docker services. Just run:
