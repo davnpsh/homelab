@@ -88,17 +88,11 @@ services:
       proxy:
         condition: service_healthy
 
-  # pdf:
-  #   # Ports used: 8080
-  #   container_name: pdf
-  #   image: bentopdf/bentopdf-simple:latest
-  #   restart: unless-stopped
-  #   labels:
-  #     glance.name: PDF tools
-  #     glance.icon: sh:bentopdf-light
-  #     glance.url: ${PDF_PANEL_URL}
-  #     glance.description: Edit PDFs
-  #     glance.hide: false
-  #   depends_on:
-  #     proxy:
-  #       condition: service_healthy
+  pdf:
+    # Ports used: 8080
+    container_name: pdf
+    image: ghcr.io/alam00000/bentopdf-simple:latest
+    restart: unless-stopped
+    depends_on:
+      proxy:
+        condition: service_healthy
