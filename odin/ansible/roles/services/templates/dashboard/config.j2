@@ -16,31 +16,88 @@ services:
       icon:
         name: simple-icons:tailscale
         wrap: true
-        
+
     - title: Proxy
       description: Proxy & port forwarding
       link: https://proxy.odin.{{host.domain}}
       icon:
         name: simple-icons:nginxproxymanager
         wrap: true
-        
+
     - title: DNS
       description: Internal domain routing
       link: https://dns.odin.{{host.domain}}
       icon:
         name: simple-icons:adguard
         wrap: true
-        
+
     - title: Bookmarks
       description: Save links
       link: https://bookmarks.odin.{{host.domain}}
       icon:
         name: simple-icons:karakeep
         wrap: true
-        
+
     - title: PDF
       description: Edit PDFs
       link: https://pdf.odin.{{host.domain}}
       icon:
         name: simple-icons:bento
+        wrap: true
+
+  HomeLab:
+    - title: Proxy
+      description: Proxy & port forwarding
+      link: https://proxy.freya.{{host.domain}}
+      icon:
+        name: simple-icons:nginxproxymanager
+        wrap: true
+        
+    - title: Torrents
+      description: Torrents manager
+      link: https://torrents.freya.{{host.domain}}
+      icon:
+        name: simple-icons:qbittorrent
+        wrap: true
+        
+    - title: Books
+      description: Read
+      link: https://books.freya.{{host.domain}}
+      icon:
+        name: simple-icons:calibreweb
+        wrap: true
+        
+    - title: Shelfmark
+      description: Download books
+      link: https://get-books.freya.{{host.domain}}
+      icon:
+        name: simple-icons:bookstack
+        wrap: true
+        
+    - title: Prowlarr
+      description: Sources indexer
+      link: https://prowlarr.freya.{{host.domain}}
+      icon:
+        name: simple-icons:cloudflare
+        wrap: true
+        
+    - title: Sonarr
+      description: Shows indexer
+      link: https://sonarr.freya.{{host.domain}}
+      icon:
+        name: simple-icons:sonarr
+        wrap: true
+        
+    - title: Radarr
+      description: Movies indexer
+      link: https://radarr.freya.{{host.domain}}
+      icon:
+        name: simple-icons:radarr
+        wrap: true
+        
+    - title: TV
+      description: Watch
+      link: https://tv.freya.{{host.domain}}
+      icon:
+        name: simple-icons:jellyfin
         wrap: true
