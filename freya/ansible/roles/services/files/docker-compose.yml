@@ -5,11 +5,6 @@ services:
     image: tailscale/tailscale:latest
     hostname: freya
     restart: unless-stopped
-    labels:
-      glance.name: Tailscale
-      glance.icon: sh:tailscale-light
-      glance.description: VPN
-      glance.hide: false
     environment:
       - TS_AUTHKEY=${TS_AUTHKEY}
       - TS_STATE_DIR=/var/lib/tailscale
@@ -32,12 +27,6 @@ services:
     container_name: proxy
     image: "jc21/nginx-proxy-manager:latest"
     restart: unless-stopped
-    labels:
-      glance.name: Proxy
-      glance.icon: sh:nginx-proxy-manager-light
-      glance.url: ${PROXY_PANEL_URL}
-      glance.description: Proxy & port forwarding
-      glance.hide: false
     environment:
       - TZ=${TZ}
     volumes:
@@ -57,12 +46,6 @@ services:
     container_name: torrents-ui
     image: ghcr.io/hotio/qui
     restart: unless-stopped
-    labels:
-      glance.name: Torrents
-      glance.icon: sh:qbittorrent-light
-      glance.url: ${TORRENTS_PANEL_URL}
-      glance.description: Torrents manager
-      glance.hide: false
     environment:
       - PUID=1000
       - PGID=1000
@@ -76,29 +59,6 @@ services:
       cinema-torrents:
         condition: service_started
 
-  glance-agent:
-    # Ports used: 27973
-    container_name: glance-agent
-    image: glanceapp/agent
-    restart: unless-stopped
-    environment:
-      - TOKEN=${GLANCE_AGENT_TOKEN}
-    volumes:
-      - /media/library:/storage/library:ro
-      - /media/cinema:/storage/cinema:ro
-
-  socket-proxy:
-    # This image is used to expose the docker socket as read-only
-    # Ports used: 2375
-    container_name: socket-proxy
-    image: "11notes/socket-proxy:2.1.6"
-    restart: unless-stopped
-    read_only: true
-    user: "0:989"
-    volumes:
-      - "/run/docker.sock:/run/docker.sock:ro"
-      - "socket-proxy.run:/run/proxy"
-
   #########################
   #     L I B R A R Y     #
   #########################
@@ -108,12 +68,6 @@ services:
     container_name: books
     image: crocodilestick/calibre-web-automated:latest
     restart: unless-stopped
-    labels:
-      glance.name: Books
-      glance.icon: sh:calibre-web-light
-      glance.url: ${BOOKS_PANEL_URL}
-      glance.description: Read
-      glance.hide: false
     environment:
       - PUID=1000
       - PGID=1000
@@ -131,12 +85,6 @@ services:
     image: ghcr.io/calibrain/shelfmark:latest
     container_name: books-downloader
     restart: unless-stopped
-    labels:
-      glance.name: Books downloader
-      glance.icon: mdi:book-plus-multiple
-      glance.url: ${BOOKS_DOWNLOADER_PANEL_URL}
-      glance.description: Download books
-      glance.hide: false
     environment:
       TZ: ${TZ}
     volumes:
@@ -170,12 +118,6 @@ services:
     container_name: prowlarr
     image: ghcr.io/hotio/prowlarr
     restart: unless-stopped
-    labels:
-      glance.name: Prowlarr
-      glance.icon: sh:prowlarr-light
-      glance.url: ${PROWLARR_PANEL_URL}
-      glance.description: Indexer
-      glance.hide: false
     environment:
       - PUID=1000
       - PGID=1000
@@ -189,12 +131,6 @@ services:
     container_name: sonarr
     image: ghcr.io/hotio/sonarr
     restart: unless-stopped
-    labels:
-      glance.name: Sonarr
-      glance.icon: sh:sonarr-light
-      glance.url: ${SONARR_PANEL_URL}
-      glance.description: Shows
-      glance.hide: false
     environment:
       - PUID=1000
       - PGID=1000
@@ -209,12 +145,6 @@ services:
     container_name: radarr
     image: ghcr.io/hotio/radarr
     restart: unless-stopped
-    labels:
-      glance.name: Radarr
-      glance.icon: sh:radarr-light
-      glance.url: ${RADARR_PANEL_URL}
-      glance.description: Movies
-      glance.hide: false
     environment:
       - PUID=1000
       - PGID=1000
@@ -229,12 +159,6 @@ services:
     container_name: tv
     image: ghcr.io/hotio/jellyfin
     restart: unless-stopped
-    labels:
-      glance.name: TV
-      glance.icon: sh:jellyfin-light
-      glance.url: ${TV_PANEL_URL}
-      glance.description: Watch
-      glance.hide: false
     environment:
       - PUID=1000
       - PGID=1000
@@ -248,6 +172,3 @@ services:
     volumes:
       - ./cinema/tv/config:/config
       - /media/cinema/tv:/data/tv
-
-volumes:
-  socket-proxy.run:
