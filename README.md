@@ -72,6 +72,7 @@ _Currently not in use._
 ## Design
 
 ![Design](./_static/design_v3.png)
+*Icons taken from [Self-Hosted Dashboard Icons](https://selfh.st/icons/)*
 
 Both instances are connected to my Tailnet using a Tailscale Docker container as a sidecar. It is bound to a Nginx container that handles the reverse proxy functionality.
 
