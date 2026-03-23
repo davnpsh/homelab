@@ -54,8 +54,8 @@ services:
     volumes:
       - ./torrents-ui/config:/config
     depends_on:
-      proxy:
-        condition: service_healthy
+      # proxy:
+      #   condition: service_healthy
       cinema-torrents:
         condition: service_started
 
