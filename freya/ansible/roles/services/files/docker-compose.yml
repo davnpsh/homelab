@@ -60,6 +60,18 @@ services:
   #########################
   #     L I B R A R Y     #
   #########################
+  
+  git:
+    # Ports used: 3000, 22
+    container_name: git
+    image: codeberg.org/forgejo/forgejo:15
+    restart: unless-stopped
+    environment:
+      - USER_UID=1000
+      - USER_GID=1000
+    volumes:
+      - /media/library/git:/data
+      - /etc/localtime:/etc/localtime:ro
 
   books:
     # Ports used: 8083
