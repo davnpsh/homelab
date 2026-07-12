@@ -64,29 +64,29 @@ services:
         condition: service_healthy
 
   dashboard:
-    # Ports used: 3000
+    # Ports used: 8000
     container_name: dashboard
-    image: hywax/mafl
+    image: ghcr.io/davnpsh/homelsp:latest
     restart: unless-stopped
     volumes:
-      - ./dashboard:/app/data
+      - ./dashboard:/app/config:ro
     depends_on:
       proxy:
         condition: service_healthy
 
-  bookmarks:
-    # Ports used: 8080
-    container_name: bookmarks
-    image: ghcr.io/go-shiori/shiori
-    restart: unless-stopped
-    environment:
-      - SHIORI_DIR=/srv/shiori
-      - SHIORI_HTTP_SECRET_KEY=${BOOKMARKS_HTTP_SECRET_KEY}
-    volumes:
-      - ./bookmarks/shiori:/srv/shiori
-    depends_on:
-      proxy:
-        condition: service_healthy
+  # bookmarks:
+  #   # Ports used: 8080
+  #   container_name: bookmarks
+  #   image: ghcr.io/go-shiori/shiori
+  #   restart: unless-stopped
+  #   environment:
+  #     - SHIORI_DIR=/srv/shiori
+  #     - SHIORI_HTTP_SECRET_KEY=${BOOKMARKS_HTTP_SECRET_KEY}
+  #   volumes:
+  #     - ./bookmarks/shiori:/srv/shiori
+  #   depends_on:
+  #     proxy:
+  #       condition: service_healthy
 
   pdf:
     # Ports used: 8080

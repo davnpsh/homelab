@@ -7,5 +7,5 @@
 - name: Render dashboard config from template
   ansible.builtin.template:
     src: dashboard/config.j2
-    dest: "{{ ansible_facts.user_dir }}/services/dashboard/config.yml"
+    dest: "{{ ansible_facts.user_dir }}/services/dashboard/config.yaml"
     mode: "0644"
