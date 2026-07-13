@@ -74,8 +74,8 @@ services:
       proxy:
         condition: service_healthy
 
-  # bookmarks:
-  #   # Ports used: 8080
+  bookmarks:
+    # Ports used: 8080
   #   container_name: bookmarks
   #   image: ghcr.io/go-shiori/shiori
   #   restart: unless-stopped
@@ -87,6 +87,14 @@ services:
   #   depends_on:
   #     proxy:
   #       condition: service_healthy
+    container_name: bookmarks
+    image: ghcr.io/davnpsh/zeldas:latest
+    restart: unless-stopped
+    volumes:
+      - ./bookmarks:/app/data
+    depends_on:
+      proxy:
+        condition: service_healthy
 
   pdf:
     # Ports used: 8080
