@@ -75,18 +75,7 @@ services:
         condition: service_healthy
 
   bookmarks:
-    # Ports used: 8080
-  #   container_name: bookmarks
-  #   image: ghcr.io/go-shiori/shiori
-  #   restart: unless-stopped
-  #   environment:
-  #     - SHIORI_DIR=/srv/shiori
-  #     - SHIORI_HTTP_SECRET_KEY=${BOOKMARKS_HTTP_SECRET_KEY}
-  #   volumes:
-  #     - ./bookmarks/shiori:/srv/shiori
-  #   depends_on:
-  #     proxy:
-  #       condition: service_healthy
+    # Ports used: 8000
     container_name: bookmarks
     image: ghcr.io/davnpsh/zeldas:latest
     restart: unless-stopped
